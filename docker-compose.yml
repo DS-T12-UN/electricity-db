@@ -1,0 +1,24 @@
+version: "3"
+services:
+  mysql-target:
+    build:
+      dockerfile: ./sql/config/mysql-target.Dockerfile
+      context: .
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql-target-data:/var/lib/mysql
+    ports: 
+      - "33060:3306"
+  etl-master:
+    build:
+      dockerfile: ./config/docker/etl-runner.Dockerfile
+      context: .
+    image: etl-master
+  etl-runner:
+    image: etl-master
+    volumes:
+      - "./src:/src"
+    command: python index.py
+volumes:
+  mysql-target-data:
