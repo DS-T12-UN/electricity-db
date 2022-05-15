@@ -10,15 +10,5 @@ services:
       - mysql-target-data:/var/lib/mysql
     ports: 
       - "33060:3306"
-  etl-master:
-    build:
-      dockerfile: ./config/docker/etl-runner.Dockerfile
-      context: .
-    image: etl-master
-  etl-runner:
-    image: etl-master
-    volumes:
-      - "./src:/src"
-    command: python index.py
 volumes:
   mysql-target-data:
