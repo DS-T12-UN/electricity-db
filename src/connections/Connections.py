@@ -1,4 +1,5 @@
 import mysql.connector
+from pymongo import MongoClient
 
 class SQLConnection:
   hostname='localhost'
@@ -83,3 +84,29 @@ class SQLConnection:
   
   def commitChanges(self):
       self.connection.commit()
+
+class MongoConnection:
+  hostname='localhost'
+  database='electricity'
+  username='citizix'
+  password='S3cret'
+  port=27017
+  connection=None
+  dbLink=None
+  collection=None
+  lastCountry={}
+
+  def __init__(self):
+    self.startConnection()
+  
+  def startConnection(self):
+    connectionString = "mongodb://"+ self.username + ":" + self.password + "@" + self.hostname + ":" + str(self.port) + "/?authMechanism=DEFAULT"
+    self.connection = MongoClient(connectionString)
+    self.dbLink = self.connection[self.database]
+    self.collection = self.dbLink["country"]
+
+  def insertData(self, data):
+    for country in data:
+      data[country]["name"] = country
+      self.collection.insert_one(data[country])
+      

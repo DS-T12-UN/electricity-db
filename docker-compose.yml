@@ -10,5 +10,15 @@ services:
       - mysql-target-data:/var/lib/mysql
     ports: 
       - "33060:3306"
+  mongo-target:
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-target-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=citizix
+      - MONGO_INITDB_ROOT_PASSWORD=S3cret
 volumes:
   mysql-target-data:
+  mongo-target-data:
